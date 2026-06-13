@@ -1,0 +1,108 @@
+{
+  "info": {
+    "name": "SPMS API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080/spms" },
+    { "key": "student_token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "company_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/ping"
+      }
+    },
+    {
+      "name": "Register Student",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/students/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rollNumber\": \"CS001\",\n  \"name\": \"Prasada Kumar\",\n  \"email\": \"prasada@example.com\",\n  \"phone\": \"9999999999\",\n  \"branch\": \"CSE\",\n  \"cgpa\": 8.5,\n  \"yearOfPassing\": 2025,\n  \"password\": \"password123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Student Login",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/student/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"prasada@example.com\",\n  \"password\": \"password123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Register Company",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/companies/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"TechCorp\",\n  \"email\": \"hr@techcorp.com\",\n  \"jobRole\": \"Software Engineer\",\n  \"salaryLpa\": 8.5,\n  \"minCgpa\": 7.5,\n  \"allowedBranches\": \"CSE,ECE\",\n  \"requiredSkills\": \"Java,Spring Boot\",\n  \"backlogAllowed\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Drive (Admin)",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/drives",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"companyId\": 1,\n  \"adminId\": 1,\n  \"testDate\": \"2025-08-01\",\n  \"interviewDate\": \"2025-08-05\",\n  \"resultDate\": \"2025-08-10\",\n  \"venue\": \"Online - Google Meet\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Check Eligibility",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/eligibility/check?studentId=1&companyId=1",
+        "header": [{ "key": "Authorization", "value": "Bearer {{student_token}}" }]
+      }
+    },
+    {
+      "name": "Auto Shortlist (Admin)",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/eligibility/shortlist/1",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }]
+      }
+    },
+    {
+      "name": "Analytics Dashboard (Admin)",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/admin/dashboard",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }]
+      }
+    },
+    {
+      "name": "Upload Resume (Student)",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/students/1/resume",
+        "header": [{ "key": "Authorization", "value": "Bearer {{student_token}}" }],
+        "body": {
+          "mode": "formdata",
+          "formdata": [{ "key": "file", "type": "file", "src": "" }]
+        }
+      }
+    }
+  ]
+}
