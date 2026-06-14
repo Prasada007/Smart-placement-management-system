@@ -127,7 +127,7 @@ Edit `src/main/java/com/placement/config/HibernateConfig.java`:
 ```java
 dataSource.setUrl("jdbc:mysql://localhost:3306/spms_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
 dataSource.setUsername("root");
-dataSource.setPassword("Prasad@07");
+dataSource.setPassword("your_password");
 ```
 
 ### Build and Deploy
