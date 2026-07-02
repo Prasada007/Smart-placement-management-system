@@ -6,7 +6,7 @@ import lombok.Data;
 public class CompanyRequest {
     private String name;
     private String email;
-    private String password;   // for JWT login
+    private String password;
     private String jobRole;
     private Double salaryLpa;
     private Double minCgpa;

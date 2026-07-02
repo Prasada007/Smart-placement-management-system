@@ -24,7 +24,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
                 SecurityConfig.class
         );
 
-        // Register Spring Security's filter chain
         FilterRegistration.Dynamic securityFilter = servletContext.addFilter(
                 AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME,
                 new DelegatingFilterProxy(
@@ -34,14 +33,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
         );
         securityFilter.addMappingForUrlPatterns(null, false, "/*");
 
-        // Register the DispatcherServlet
         DispatcherServlet dispatcher = new DispatcherServlet(context);
         ServletRegistration.Dynamic registration =
                 servletContext.addServlet("dispatcher", dispatcher);
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
 
-        // Enable multipart file upload
         registration.setMultipartConfig(
                 new jakarta.servlet.MultipartConfigElement(
                         "/home/prasad/spms-resumes",

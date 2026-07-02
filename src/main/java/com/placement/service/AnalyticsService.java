@@ -17,6 +17,9 @@ public class AnalyticsService {
     private CompanyRepo companyRepo;
 
     @Autowired
+    private PlacementRequestRepo requestRepo;
+
+    @Autowired
     private PlacementDriveRepo driveRepo;
 
     @Autowired
@@ -34,7 +37,7 @@ public class AnalyticsService {
         long totalDrives = driveRepo.count();
         long totalApplications = applicationRepo.count();
 
-        // Students placed
+        // Students placed = shortlisted with result SELECTED
         long studentsPlaced = shortlistedRepo.findAll()
                 .stream()
                 .filter(sc -> "SELECTED".equalsIgnoreCase(sc.getResult()))
@@ -48,10 +51,10 @@ public class AnalyticsService {
                 : 0;
 
         // Highest package
-        double highestPackage = companyRepo.findAll()
+        double highestPackage = requestRepo.findAll()
                 .stream()
-                .filter(c -> c.getSalaryLpa() != null)
-                .mapToDouble(c -> c.getSalaryLpa())
+                .filter(r -> r.getSalaryLpa() != null)
+                .mapToDouble(r -> r.getSalaryLpa())
                 .max()
                 .orElse(0);
 

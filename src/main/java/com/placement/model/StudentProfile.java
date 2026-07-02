@@ -14,6 +14,7 @@ public class StudentProfile {
 
     @OneToOne
     @JoinColumn(name = "student_id", unique = true, nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Student student;
 
     private String skills;

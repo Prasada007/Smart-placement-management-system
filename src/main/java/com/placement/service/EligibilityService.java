@@ -1,9 +1,9 @@
 package com.placement.service;
 
-import com.placement.model.EligibilityRule;
+import com.placement.model.PlacementRequest;
 import com.placement.model.Student;
 import com.placement.model.StudentProfile;
-import com.placement.repository.EligibilityRuleRepo;
+import com.placement.repository.PlacementRequestRepo;
 import com.placement.repository.StudentProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,19 @@ import java.util.List;
 public class EligibilityService {
 
     @Autowired
-    private EligibilityRuleRepo eligibilityRuleRepo;
+    private PlacementRequestRepo requestRepo;
 
     @Autowired
     private StudentProfileRepo studentProfileRepo;
 
-    // Check if a single student is eligible for a company
-    public boolean isEligible(Student student, Integer companyId) {
-        EligibilityRule rule = eligibilityRuleRepo
-                .findByCompanyId(companyId)
-                .orElseThrow(() -> new RuntimeException("No eligibility rule found for company"));
+    // Check if a single student is eligible for a placement request
+    public boolean isEligible(Student student, Integer requestId) {
+        PlacementRequest rule = requestRepo
+                .findById(requestId)
+                .orElseThrow(() -> new RuntimeException("No placement request found"));
 
         // Check CGPA
-        if (student.getCgpa() < rule.getMinCgpa()) {
+        if (rule.getMinCgpa() != null && student.getCgpa() < rule.getMinCgpa()) {
             return false;
         }
 
@@ -38,17 +38,19 @@ public class EligibilityService {
         }
 
         // Check Branch
-        List<String> allowedBranches = Arrays.asList(
-                rule.getAllowedBranches().split(",")
-        );
-        boolean branchMatch = allowedBranches.stream()
-                .map(String::trim)
-                .anyMatch(b -> b.equalsIgnoreCase(student.getBranch()));
-        if (!branchMatch) {
-            return false;
+        if (rule.getAllowedBranches() != null && !rule.getAllowedBranches().isEmpty()) {
+            List<String> allowedBranches = Arrays.asList(
+                    rule.getAllowedBranches().split(",")
+            );
+            boolean branchMatch = allowedBranches.stream()
+                    .map(String::trim)
+                    .anyMatch(b -> b.equalsIgnoreCase(student.getBranch()));
+            if (!branchMatch) {
+                return false;
+            }
         }
 
-        // Check Skills (if required)
+        // Check Skills if required
         if (rule.getRequiredSkills() != null && !rule.getRequiredSkills().isEmpty()) {
             StudentProfile profile = studentProfileRepo
                     .findByStudentId(student.getId())
@@ -80,14 +82,14 @@ public class EligibilityService {
     }
 
     // Return reasons why student is NOT eligible
-    public List<String> getIneligibilityReasons(Student student, Integer companyId) {
+    public List<String> getIneligibilityReasons(Student student, Integer requestId) {
         List<String> reasons = new ArrayList<>();
 
-        EligibilityRule rule = eligibilityRuleRepo
-                .findByCompanyId(companyId)
-                .orElseThrow(() -> new RuntimeException("No eligibility rule found"));
+        PlacementRequest rule = requestRepo
+                .findById(requestId)
+                .orElseThrow(() -> new RuntimeException("No placement request found"));
 
-        if (student.getCgpa() < rule.getMinCgpa()) {
+        if (rule.getMinCgpa() != null && student.getCgpa() < rule.getMinCgpa()) {
             reasons.add("CGPA " + student.getCgpa() +
                     " is below required " + rule.getMinCgpa());
         }
@@ -96,15 +98,17 @@ public class EligibilityService {
             reasons.add("Student has active backlog");
         }
 
-        List<String> allowedBranches = Arrays.asList(
-                rule.getAllowedBranches().split(",")
-        );
-        boolean branchMatch = allowedBranches.stream()
-                .map(String::trim)
-                .anyMatch(b -> b.equalsIgnoreCase(student.getBranch()));
-        if (!branchMatch) {
-            reasons.add("Branch " + student.getBranch() +
-                    " not in allowed list: " + rule.getAllowedBranches());
+        if (rule.getAllowedBranches() != null && !rule.getAllowedBranches().isEmpty()) {
+            List<String> allowedBranches = Arrays.asList(
+                    rule.getAllowedBranches().split(",")
+            );
+            boolean branchMatch = allowedBranches.stream()
+                    .map(String::trim)
+                    .anyMatch(b -> b.equalsIgnoreCase(student.getBranch()));
+            if (!branchMatch) {
+                reasons.add("Branch " + student.getBranch() +
+                        " not in allowed list: " + rule.getAllowedBranches());
+            }
         }
 
         if (rule.getRequiredSkills() != null && !rule.getRequiredSkills().isEmpty()) {

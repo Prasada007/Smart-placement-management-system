@@ -22,19 +22,17 @@ public class FileStorageService {
             throw new RuntimeException("Only PDF files are allowed");
         }
 
-        // Validate file size (max 2MB)
+        // Validate file size max 2MB
         if (file.getSize() > 2 * 1024 * 1024) {
             throw new RuntimeException("File size must be less than 2MB");
         }
 
-        // Generate unique filename
         String filename = "student_" + studentId + "_" +
                 UUID.randomUUID().toString().substring(0, 8) + ".pdf";
 
         try {
             Path uploadPath = Paths.get(FileStorageConfig.RESUME_UPLOAD_DIR);
 
-            // Create directory if it doesn't exist
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }

@@ -2,8 +2,9 @@ package com.placement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
@@ -19,22 +20,27 @@ public class PlacementDrive {
     private Company company;
 
     @ManyToOne
+    @JoinColumn(name = "request_id", nullable = false)
+    private PlacementRequest request;
+
+    @ManyToOne
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
 
     @Column(name = "test_date")
-    private LocalDate testDate;
+    private LocalDateTime testDate;
 
     @Column(name = "interview_date")
-    private LocalDate interviewDate;
+    private LocalDateTime interviewDate;
 
     @Column(name = "result_date")
-    private LocalDate resultDate;
+    private LocalDateTime resultDate;
 
     private String venue;
 
     private String status = "UPCOMING";
 
-    @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Application> applications;
 }

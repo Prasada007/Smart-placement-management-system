@@ -27,7 +27,6 @@ public class AutoShortlistService {
     @Autowired
     private EligibilityService eligibilityService;
 
-    // Auto-shortlist all eligible students for a drive
     public List<ShortlistedCandidate> autoShortlist(Integer driveId) {
         PlacementDrive drive = driveRepo.findById(driveId)
                 .orElseThrow(() -> new RuntimeException("Drive not found"));
@@ -37,7 +36,7 @@ public class AutoShortlistService {
 
         for (Student student : allStudents) {
             boolean eligible = eligibilityService
-                    .isEligible(student, drive.getCompany().getId());
+                    .isEligible(student, drive.getRequest().getId());
 
             if (eligible) {
                 // Avoid duplicate shortlisting
@@ -60,7 +59,6 @@ public class AutoShortlistService {
         return shortlisted;
     }
 
-    // Get all shortlisted candidates for a drive
     public List<ShortlistedCandidate> getShortlistedByDrive(Integer driveId) {
         return shortlistRepo.findByDriveId(driveId);
     }

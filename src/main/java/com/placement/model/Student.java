@@ -36,6 +36,7 @@ public class Student {
     private Boolean hasBacklog = false;
 
     @Column(nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String password;
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

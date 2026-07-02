@@ -1,14 +1,14 @@
 package com.placement.dto;
 
 import lombok.Data;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class DriveRequest {
-    private Integer companyId;
+    private Integer requestId;
     private Integer adminId;
-    private LocalDate testDate;
-    private LocalDate interviewDate;
-    private LocalDate resultDate;
+    private LocalDateTime testDate;
+    private LocalDateTime interviewDate;
+    private LocalDateTime resultDate;
     private String venue;
 }

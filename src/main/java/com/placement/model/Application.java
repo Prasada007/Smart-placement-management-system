@@ -3,6 +3,7 @@ package com.placement.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
@@ -20,6 +21,7 @@ public class Application {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "drive_id", nullable = false)
     private PlacementDrive drive;

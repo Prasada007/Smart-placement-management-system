@@ -1,5 +1,5 @@
 -- Smart Placement Management System
--- Database Schema
+-- Database Schema (Updated for PlacementRequest multi-role flow)
 
 CREATE DATABASE IF NOT EXISTS spms_db;
 USE spms_db;
@@ -38,31 +38,35 @@ CREATE TABLE IF NOT EXISTS student_profiles (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 );
 
--- 4. Companies
+-- 4. Companies (password added, job_role/salary_lpa removed — moved to placement_requests)
 CREATE TABLE IF NOT EXISTS companies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    job_role VARCHAR(100),
-    salary_lpa DECIMAL(5,2),
+    password VARCHAR(255) NOT NULL,
     status VARCHAR(20) DEFAULT 'PENDING'
 );
 
--- 5. Eligibility Rules
-CREATE TABLE IF NOT EXISTS eligibility_rules (
+-- 5. Placement Requests (replaces eligibility_rules; supports multiple roles per company)
+CREATE TABLE IF NOT EXISTS placement_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    company_id INT UNIQUE NOT NULL,
-    min_cgpa DECIMAL(4,2) NOT NULL,
-    allowed_branches TEXT NOT NULL,
+    company_id INT NOT NULL,
+    job_role VARCHAR(100) NOT NULL,
+    salary_lpa DECIMAL(5,2) NOT NULL,
+    min_cgpa DECIMAL(4,2),
+    allowed_branches TEXT,
     required_skills TEXT,
     backlog_allowed BOOLEAN DEFAULT FALSE,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 );
 
--- 6. Placement Drives
+-- 6. Placement Drives (now linked to a placement_request)
 CREATE TABLE IF NOT EXISTS placement_drives (
     id INT AUTO_INCREMENT PRIMARY KEY,
     company_id INT NOT NULL,
+    request_id INT NOT NULL,
     admin_id INT NOT NULL,
     test_date DATE,
     interview_date DATE,
@@ -70,6 +74,7 @@ CREATE TABLE IF NOT EXISTS placement_drives (
     venue VARCHAR(255),
     status VARCHAR(20) DEFAULT 'UPCOMING',
     FOREIGN KEY (company_id) REFERENCES companies(id),
+    FOREIGN KEY (request_id) REFERENCES placement_requests(id),
     FOREIGN KEY (admin_id) REFERENCES admins(id)
 );
 

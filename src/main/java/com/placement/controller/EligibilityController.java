@@ -29,14 +29,14 @@ public class EligibilityController {
     @GetMapping("/check")
     public ResponseEntity<ApiResponse> checkEligibility(
             @RequestParam Integer studentId,
-            @RequestParam Integer companyId) {
+            @RequestParam Integer requestId) {
 
         Student student = studentRepo.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        boolean eligible = eligibilityService.isEligible(student, companyId);
+        boolean eligible = eligibilityService.isEligible(student, requestId);
         List<String> reasons = eligible ? List.of() :
-                eligibilityService.getIneligibilityReasons(student, companyId);
+                eligibilityService.getIneligibilityReasons(student, requestId);
 
         return ResponseEntity.ok(new ApiResponse(
                 eligible,
