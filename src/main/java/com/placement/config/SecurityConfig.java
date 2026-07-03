@@ -32,15 +32,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         
-        String frontendUrl = System.getProperty("FRONTEND_URL");
-        if (frontendUrl == null) {
-            frontendUrl = System.getenv("FRONTEND_URL");
-        }
-        if (frontendUrl != null && !frontendUrl.isEmpty()) {
-            config.setAllowedOrigins(List.of("http://localhost:5173", frontendUrl));
-        } else {
-            config.setAllowedOrigins(List.of("http://localhost:5173"));
-        }
+        config.setAllowedOriginPatterns(List.of("*"));
         
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
