@@ -23,9 +23,32 @@ public class HibernateConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spms_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-        dataSource.setUsername("root");
-        dataSource.setPassword("Prasad@07");
+
+        String url = System.getProperty("DB_URL");
+        if (url == null) {
+            url = System.getenv("DB_URL");
+        }
+        if (url == null) {
+            url = "jdbc:mysql://localhost:3306/spms_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        }
+        String username = System.getProperty("DB_USERNAME");
+        if (username == null) {
+            username = System.getenv("DB_USERNAME");
+        }
+        if (username == null) {
+            username = "root";
+        }
+        String password = System.getProperty("DB_PASSWORD");
+        if (password == null) {
+            password = System.getenv("DB_PASSWORD");
+        }
+        if (password == null) {
+            password = "Prasad@07";
+        }
+
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         return dataSource;
     }
 

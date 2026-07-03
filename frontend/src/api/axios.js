@@ -1,7 +1,10 @@
 import axios from "axios";
 
+// Read API URL from environment variables, fallback to local development URL
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/spms";
+
 const api = axios.create({
-    baseURL: "http://localhost:8080/spms/api",
+    baseURL: `${BACKEND_URL}/api`,
 });
 
 // Attach JWT token to every request automatically
@@ -13,4 +16,5 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+export { BACKEND_URL };
 export default api;

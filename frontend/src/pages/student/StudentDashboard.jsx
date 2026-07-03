@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import api, { BACKEND_URL } from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import DashboardLayout from "../../components/DashboardLayout";
 import StatCard from "../../components/StatCard";
@@ -90,7 +90,7 @@ export default function StudentDashboard() {
                   </div>
                   <div className="resume-row">
                     <a
-                        href={`http://localhost:8080/spms/api/students/${user.id}/resume`}
+                        href={`${BACKEND_URL}/api/students/${user.id}/resume`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="resume-link"

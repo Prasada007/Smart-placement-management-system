@@ -1,9 +1,6 @@
 -- Smart Placement Management System
 -- Database Schema (Updated for PlacementRequest multi-role flow)
 
-CREATE DATABASE IF NOT EXISTS spms_db;
-USE spms_db;
-
 -- 1. Admins
 CREATE TABLE IF NOT EXISTS admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
