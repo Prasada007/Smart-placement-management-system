@@ -1,8 +1,11 @@
-# Smart Placement Management System (SPMS)
+# HireVo — Smart Placement Management Platform
 
 A full-stack placement management system built to automate and streamline
 the entire campus placement process — from student registration to
 final shortlisting.
+
+🌐 **Live Demo**: [hirevo-prasad.vercel.app](https://hirevo-prasad.vercel.app)
+⚙️ **Backend API**: [hirevo.onrender.com](https://hirevo.onrender.com)
 
 ---
 
